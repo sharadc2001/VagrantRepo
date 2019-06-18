@@ -10,3 +10,32 @@ vagrant box list
 Check 
 vagrant status
 
+
+Sometimes "vagrant destroy" fails with an exception from the depths of the virtualbox Ruby gem. 
+A solution might be to use the command-line VirtualBox tool VBoxManage to forcibly stop the machine. 
+
+ You can actually see the VirtualBox process started by Vagrant:
+
+
+$ ps aux | grep -i vagr
+me ... /Applications/VirtualBox.app/Contents/MacOS/VBoxHeadless --comment vagrant_1326716120 --startvm 026abe1a-b9
+
+
+Power off the Vagrant VM:
+
+
+$ VBoxManage controlvm vagrant_1326716120 poweroff
+# Or: 'cat .vagrant' => {"active":{"default":"a683f28a-4bdc-4739-b7ae-8ae21013dbd5"}}
+# VBoxManage controlvm a683f28a-4bdc-4739-b7ae-8ae21013dbd5 poweroff
+
+
+Run vagrant destroy again:
+
+
+$ vagrant destroy
+[default] Destroying VM and associated drives...
+
+Reference:
+https://blog.jakubholy.net/2012/03/24/note-to-self-how-to-solve-vagrant-destroy-failing-with-error-in-api-call-in-ffi-rb/
+
+
